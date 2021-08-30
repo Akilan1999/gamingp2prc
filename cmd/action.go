@@ -3,11 +3,11 @@ package cmd
 import (
 	"fmt"
 	"git.sr.ht/~akilan1999/p2p-rendering-computation/client"
-	"git.sr.ht/~akilan1999/p2p-rendering-computation/config"
-	"git.sr.ht/~akilan1999/p2p-rendering-computation/generate"
+	"github.com/Akilan1999/gamingp2prc/config"
+	"github.com/Akilan1999/gamingp2prc/generate"
 	"git.sr.ht/~akilan1999/p2p-rendering-computation/p2p"
 	"git.sr.ht/~akilan1999/p2p-rendering-computation/plugin"
-	"git.sr.ht/~akilan1999/p2p-rendering-computation/server"
+	"github.com/Akilan1999/gamingp2prc/server"
 	"github.com/urfave/cli/v2"
 )
 
@@ -77,7 +77,6 @@ var CliAction = func(ctx *cli.Context) error {
 		// Adds the new server IP to the iptable
 		res.WriteIpTable()
 
-
 	}
 
 	// Displays all images available on the server side
@@ -91,8 +90,8 @@ var CliAction = func(ctx *cli.Context) error {
 	}
 
 	// Function called to stop and remove server from Docker
-	if RemoveVM != ""  && ID != "" {
-		err := client.RemoveContianer(RemoveVM,ID)
+	if RemoveVM != "" && ID != "" {
+		err := client.RemoveContianer(RemoveVM, ID)
 		if err != nil {
 			fmt.Print(err)
 		}
@@ -109,7 +108,7 @@ var CliAction = func(ctx *cli.Context) error {
 		}
 
 		// Calls function to do Api call to start the container on the server side
-		imageRes, err := client.StartContainer(CreateVM,PortsInt,GPU,ContainerName)
+		imageRes, err := client.StartContainer(CreateVM, PortsInt, GPU, ContainerName)
 
 		if err != nil {
 			fmt.Print(err)
@@ -146,9 +145,9 @@ var CliAction = func(ctx *cli.Context) error {
 	}
 
 	// If the view plugin flag is called then display all
-	// plugins available 
+	// plugins available
 	if ViewPlugin {
-		plugins ,err := plugin.DetectPlugins()
+		plugins, err := plugin.DetectPlugins()
 		if err != nil {
 			fmt.Print(err)
 		}
@@ -205,15 +204,15 @@ var CliAction = func(ctx *cli.Context) error {
 			} else {
 				client.PrettyPrint(group)
 			}
-		} else if  ID != "" { // Add container to group based on group ID provided
+		} else if ID != "" {	// Add container to group based on group ID provided
 			// --id <Container ID>
-			group, err := client.AddContainerToGroup(ID,Group)
+			group, err := client.AddContainerToGroup(ID, Group)
 			if err != nil {
 				fmt.Println(err)
 			} else {
 				client.PrettyPrint(group)
 			}
-		} else { // View all information about current group
+		} else {	// View all information about current group
 			group, err := client.GetGroup(Group)
 			if err != nil {
 				fmt.Println(err)
@@ -252,9 +251,9 @@ var CliAction = func(ctx *cli.Context) error {
 		var err error
 		// If the module name is provided
 		if Modulename != "" {
-			err = generate.GenerateNewProject(Generate,Modulename)
+			err = generate.GenerateNewProject(Generate, Modulename)
 		} else {
-			err = generate.GenerateNewProject(Generate,Generate)
+			err = generate.GenerateNewProject(Generate, Generate)
 		}
 		if err != nil {
 			fmt.Println(err)
@@ -269,8 +268,6 @@ var CliAction = func(ctx *cli.Context) error {
 		}
 	}
 	//--------------------------------
-
-
 
 	return nil
 }

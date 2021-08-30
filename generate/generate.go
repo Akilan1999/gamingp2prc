@@ -4,7 +4,7 @@ package generate
 
 import (
 	"fmt"
-	"git.sr.ht/~akilan1999/p2p-rendering-computation/config"
+	"github.com/Akilan1999/gamingp2prc/config"
 	"github.com/otiai10/copy"
 	"go/ast"
 	"go/token"

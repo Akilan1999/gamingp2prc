@@ -3,7 +3,7 @@ package server
 import (
 	"encoding/json"
 	"fmt"
-	"git.sr.ht/~akilan1999/p2p-rendering-computation/config"
+	"github.com/Akilan1999/gamingp2prc/config"
 	"git.sr.ht/~akilan1999/p2p-rendering-computation/p2p"
 	"git.sr.ht/~akilan1999/p2p-rendering-computation/server/docker"
 	"github.com/gin-gonic/gin"
@@ -11,7 +11,7 @@ import (
 	"net/http"
 )
 
-func Server() error{
+func Server() error {
 	r := gin.Default()
 
 	// Gets default information of the server
@@ -20,7 +20,7 @@ func Server() error{
 	})
 
 	// Speed test with 50 mbps
-	r.GET("/50", func(c *gin.Context){
+	r.GET("/50", func(c *gin.Context) {
 		// Get Path from config
 		config, err := config.ConfigInit()
 		if err != nil {
@@ -71,7 +71,7 @@ func Server() error{
 			c.String(http.StatusOK, fmt.Sprint(err))
 		}
 
-		json.Unmarshal(file,&IPTable)
+		json.Unmarshal(file, &IPTable)
 
 		//Add Client IP address to IPTable struct
 		IPTable.IpAddress = append(IPTable.IpAddress, ClientHost)
@@ -83,7 +83,7 @@ func Server() error{
 		}
 
 		// Reads IP addresses from ip table
-		IpAddresses,err := p2p.ReadIpTable()
+		IpAddresses, err := p2p.ReadIpTable()
 		if err != nil {
 			c.String(http.StatusOK, fmt.Sprint(err))
 		}
@@ -91,20 +91,20 @@ func Server() error{
 		c.JSON(http.StatusOK, IpAddresses)
 	})
 
-    // Starts docker container in server
+	// Starts docker container in server
 	r.GET("/startcontainer", func(c *gin.Context) {
 		// Get Number of ports to open and whether to use GPU or not
-		Ports := c.DefaultQuery("ports","0")
-		GPU := c.DefaultQuery("GPU","false")
-		ContainerName := c.DefaultQuery("ContainerName","")
-        var PortsInt int
+		Ports := c.DefaultQuery("ports", "0")
+		GPU := c.DefaultQuery("GPU", "false")
+		ContainerName := c.DefaultQuery("ContainerName", "")
+		var PortsInt int
 
 		// Convert Get Request value to int
 		fmt.Sscanf(Ports, "%d", &PortsInt)
 
 		// Creates container and returns-back result to
 		// access container
-		resp, err := docker.BuildRunContainer(PortsInt,GPU,ContainerName)
+		resp, err := docker.BuildRunContainer(PortsInt, GPU, ContainerName)
 
 		if err != nil {
 			c.String(http.StatusInternalServerError, fmt.Sprintf("error: %s", err))
@@ -115,7 +115,7 @@ func Server() error{
 
 	//Remove container
 	r.GET("/RemoveContainer", func(c *gin.Context) {
-		ID := c.DefaultQuery("id","0")
+		ID := c.DefaultQuery("id", "0")
 		if err := docker.StopAndRemoveContainer(ID); err != nil {
 			c.String(http.StatusInternalServerError, fmt.Sprintf("error: %s", err))
 		}
